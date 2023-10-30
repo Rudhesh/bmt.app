@@ -12,7 +12,7 @@ export default function Login() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
          
         <h2 className=" text-center text-5xl font-bold leading-9 tracking-tight text-[#384D6C]">
-            Login
+           BMT APP
           </h2>
           <h2 className="mt-2 text-center text-xl  leading-9 tracking-tight text-gray-900">
           Login to take charge. Unleash BMT app.

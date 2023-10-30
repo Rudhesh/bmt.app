@@ -27,8 +27,42 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useRouter} from "next/navigation"
 import {usePathname} from "next/navigation"
 
+const menuItems = [
+  {
+    heading: 'HOME',
+    items: [
+      { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+      { text: 'Panel', icon: <MultilineChartIcon />, path: '/panel' },
+    ],
+  },
+  {
+    heading: 'VIEW',
+    items: [
+      { text: 'Search', icon: <SearchIcon />, path: '/search' },
+      { text: 'Notification', icon: <NotificationsPausedIcon />, path: '/notification' },
+    ],
+  },
+  {
+    heading: 'CONFIGURATION',
+    items: [
+      { text: 'Data partition', icon: <StorageIcon />, path: '/datapartition' },
+      { text: 'Node graph', icon: <WorkspacesIcon />, path: '/nodegraph' },
+      { text: 'Import', icon: <ImportExportIcon />, path: '/import' },
+    ],
+  },
+  {
+    heading: 'MANAGEMENT',
+    items: [
+      { text: 'User', icon: <PersonIcon />, path: '/user' },
+      { text: 'Log out', icon: <LogoutIcon />, path: '/' },
+    ],
+  },
+];
+
 
 const drawerWidth = 240;
+const appBarHeight = 45;
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -55,6 +89,9 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
+  height: appBarHeight, // Set the height here
+  display: 'flex', // Use flex display
+  justifyContent: 'center', // Center the content horizontally
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -68,6 +105,8 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
+console.log(AppBar)
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -86,35 +125,32 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Layout({ children }: any) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  React.useEffect(() => {
-    setOpen(true); // Ensure the menu is open when changing routes
-  }, [pathname]);
+ 
 
   const handleDrawerOpen = () => {
-    if (!open) {
+ 
       setOpen(true);
-    }
+    
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-console.log(open)
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#384D6C" ,height: "45px"}}>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#384D6C" }}>
         <Toolbar className='top-bar' >
         <IconButton onClick={handleDrawerClose}>
        
-          {open ?   <MenuOpenIcon  style={{ color: 'white',  marginBottom: "20px" }} />:null}
+          {open ?   <MenuOpenIcon  style={{ color: 'white' }} />:null}
           </IconButton>
           <IconButton
             color="inherit"
@@ -123,7 +159,7 @@ console.log(open)
             edge="start"
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
-            <MenuIcon style={{  marginBottom: "20px"}} />
+            <MenuIcon/>
           </IconButton>
         
 {!open ?   <Image
@@ -131,7 +167,7 @@ console.log(open)
                 height={125}
                 width={125}
                 alt="Breitfuss Logo"
-                className="mb-5"
+                
               /> :null}
               
              
@@ -166,70 +202,40 @@ console.log(open)
         </DrawerHeader>
        
         
-        <List className="bg-[#384D6C] text-white flex flex-col text-xs h-screen">
-  <div className=" mb-10 flex flex-col items-center">
-    <AccountCircleIcon style={{ fontSize: '66px' }} />
-    <Typography variant='subtitle1' className="text-white">John Conner</Typography>
-    <Typography variant='subtitle2'>USER</Typography>
-  </div>
-  <div className='ml-7 text-sm'>HOME</div>
-  <ListItem className="cursor-pointer mt-2 hover:bg-[#303f57] transition duration-300"  onClick={() => router.push("/dashboard")}>
-    <div className={pathname.startsWith("/dashboard") ? "text-gray-400 ml-10": "text-white ml-10"} >
-      <DashboardIcon className="mr-2" />Dashboard
-    </div>
-  </ListItem>
-  <ListItem className="cursor-pointer  hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/panel")}>
-    <div className="ml-10 flex items-center">
-      <MultilineChartIcon className="mr-2" />Panel
-    </div>
-  </ListItem>
-  <div className='ml-7 mt-10 text-sm'>VIEW</div>
-  <ListItem className="cursor-pointer mt-2 hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/search")}>
-    <div className="ml-10 flex items-center">
-      <SearchIcon className="mr-2" />Search
-    </div>
-  </ListItem>
-  <ListItem className="cursor-pointer hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/notification")}>
-    <div className="ml-10 flex items-center">
-      <NotificationsPausedIcon className="mr-2" />Notification
-    </div>
-  </ListItem>
-  <div className='ml-7  mt-10 text-sm'>CONFIGURATION</div>
-  <ListItem className="cursor-pointer mt-2 hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/datapartition")}>
-    <div className="ml-10 flex items-center">
-      <StorageIcon className="mr-2" />Data partition
-    </div>
-  </ListItem>
-  <ListItem className="cursor-pointer hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/nodegraph")}>
-    <div className="ml-10 flex items-center">
-      <WorkspacesIcon className="mr-2" />Node graph
-    </div>
-  </ListItem>
-  <ListItem className="cursor-pointer hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/import")}>
-    <div className="ml-10 flex items-center">
-      <ImportExportIcon className="mr-2" />Import
-    </div>
-  </ListItem>
-  <div className=' ml-7  mt-10 text-sm'>MANAGEMENT</div>
-  <ListItem className="cursor-pointer mt-2 hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/user")}>
-    <div className="ml-10 flex items-center">
-      <PersonIcon className="mr-2" />User
-    </div>
-  </ListItem>
-  <ListItem className="cursor-pointer  hover:bg-[#303f57] transition duration-300" onClick={() => router.push("/")}>
-    <div className="ml-10 flex items-center">
-      <LogoutIcon className="mr-2" />Log out
-    </div>
-  </ListItem>
-</List>
 
-       
+        <List className="bg-[#384D6C] text-white flex flex-col text-xs h-screen">
+          <div className="mb-10 flex flex-col items-center">
+            <AccountCircleIcon style={{ fontSize: '66px' }} />
+            <Typography variant="subtitle1" className="text-white">
+              John Conner
+            </Typography>
+            <Typography variant="subtitle2">USER</Typography>
+          </div>
+          {menuItems.map((menu, index) => (
+            <div  key={index} ><div className={`ml-7 text-sm ${index === 0 ? '' : 'mt-10'}`}>
+            {menu.heading}
+          </div><div>{menu.items.map((item, itemIndex) => (
+              <ListItem
+              key={itemIndex}
+              className={`cursor-pointer mt-2 hover:bg-[#303f57] transition duration-300  rounded-lg ${
+                pathname === item.path ? 'bg-[#303f57] text-gray-100 rounded-lg' : 'text-white'
+              }`}
+              onClick={() => router.push(item.path)}
+            >
+                <div className='ml-10'>
+                 <span  className="mr-2"> {item.icon}</span>
+                  {item.text}
+                </div>
+              </ListItem>
+            ))}</div></div> 
+          ))}
+        </List>
        
       </Drawer>
       <Main open={open}>
+        {console.log(open)}
         <DrawerHeader />
-       
-        <main>{children}</main>
+     {children}
       </Main>
     
     </Box>
